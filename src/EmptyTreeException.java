@@ -1,19 +1,35 @@
 // -------------------------------------------------------------------------
 /**
- *  Write a one-sentence summary of your class here.
- *  Follow it with additional details about its purpose, what abstraction
- *  it represents, and how to use it.
+ * Write a one-sentence summary of your class here. Follow it with additional
+ * details about its purpose, what abstraction it represents, and how to use it.
  * 
- *  @author praga
- *  @version Oct 6, 2026
+ * @author Pragati Anandarajan
+ * @version Oct 6, 2026
  */
 public class EmptyTreeException
     extends RuntimeException
 {
-    //~ Fields ................................................................
+    // ----------------------------------------------------------
+    /**
+     * Create a new EmptyTreeException object.
+     */
 
-    //~ Constructors ..........................................................
+    public EmptyTreeException()
+    {
+        this("The tree is empty.");
+    }
 
-    //~Public  Methods ........................................................
+
+    // ----------------------------------------------------------
+    /**
+     * Create a new EmptyTreeException object with message.
+     * 
+     * @param message
+     *            description of error
+     */
+    public EmptyTreeException(String message)
+    {
+        super(message);
+    }
 
 }
