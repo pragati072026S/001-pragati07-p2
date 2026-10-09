@@ -13,6 +13,8 @@ public class ProjectTwoTest
         testBinaryNode();
         testBinaryTree();
         testDecisionTree();
+        testReadData();
+        testBuildTree();
     }
 
 
@@ -100,5 +102,35 @@ public class ProjectTwoTest
         tree.resetCurrentNode();
         System.out.println("Nodes (expect 7): " + tree.getNumberOfNodes());
         System.out.println("Height (expect 4): " + tree.getHeight());
+    }
+    
+    private static void testReadData()
+    {
+        SARSCoV3HealthBuilder builder = new SARSCoV3HealthBuilder("data2.txt");
+        System.out.println(builder.readData("data2.txt"));
+        System.out.println(builder.readData("data3.txt"));
+        System.out.println(builder.readData("missing.txt"));
+    }
+    
+    private static void testBuildTree()
+    {
+        SARSCoV3HealthBuilder builder = new SARSCoV3HealthBuilder("data2.txt");
+        DecisionTreeInterface<String> tree = builder.getHealthTree();
+
+        System.out.println("Root (expect Age >30?): " + tree.getRootData());
+        System.out.println("Current (expect Age >30?): " + tree.getCurrentData());
+        System.out.println("Nodes (expect 5): " + tree.getNumberOfNodes());
+        System.out.println("Height (expect 3): " + tree.getHeight());
+        System.out.print("Inorder (expect fit Age >30? unfit workout? fit): ");
+        ((DecisionTree<String>)tree).inorderTraversal();
+
+        SARSCoV3HealthBuilder empty = new SARSCoV3HealthBuilder("data3.txt");
+        System.out.println("data3 empty (expect true): "
+            + empty.getHealthTree().isEmpty());
+
+        SARSCoV3HealthBuilder big = new SARSCoV3HealthBuilder("data.txt");
+        System.out.println("data.txt root (expect Recently tested?): "
+            + big.getHealthTree().getRootData());
+        System.out.println("data.txt nodes: " + big.getHealthTree().getNumberOfNodes());
     }
 }
