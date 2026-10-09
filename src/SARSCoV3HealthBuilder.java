@@ -110,6 +110,21 @@ public class SARSCoV3HealthBuilder
     }
     public void learn()
     {
-        // temporary stub, replaced in the next step
+        String oldAnswer = healthTree.getCurrentData();
+
+        System.out.println("What should be the answer?");
+        String newAnswer = Driver.getUserResponse();
+
+        System.out.println("Give me a question whose answer is yes for "
+            + newAnswer + "  but no for  " + oldAnswer);
+        String question = Driver.getUserResponse();
+
+        updateTree(question, oldAnswer, newAnswer);
+    }
+    
+    public void updateTree(String question, String noAnswer, String yesAnswer)
+    {
+        healthTree.getCurrentNode().setData(question);
+        healthTree.setResponses(noAnswer, yesAnswer);
     }
 }

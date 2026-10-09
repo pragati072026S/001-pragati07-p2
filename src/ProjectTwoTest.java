@@ -133,4 +133,23 @@ public class ProjectTwoTest
             + big.getHealthTree().getRootData());
         System.out.println("data.txt nodes: " + big.getHealthTree().getNumberOfNodes());
     }
+    
+    private static void testUpdateTree()
+    {
+        SARSCoV3HealthBuilder builder = new SARSCoV3HealthBuilder("data2.txt");
+        DecisionTreeInterface<String> tree = builder.getHealthTree();
+
+        tree.moveToNo();
+        System.out.println("At leaf (expect fit): " + tree.getCurrentData());
+        builder.updateTree("Do you have unhealthy eating habits?", "fit", "unfit");
+
+        System.out.println("Nodes (expect 7): " + tree.getNumberOfNodes());
+        System.out.println("Height (expect 3): " + tree.getHeight());
+        tree.resetCurrentNode();
+        tree.moveToNo();
+        System.out.println("Question (expect Do you have unhealthy eating habits?): "
+            + tree.getCurrentData());
+        tree.moveToYes();
+        System.out.println("Yes leaf (expect unfit): " + tree.getCurrentData());
+    }
 }
