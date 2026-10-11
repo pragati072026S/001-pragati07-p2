@@ -2,30 +2,47 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 // -------------------------------------------------------------------------
 /**
- *  Write a one-sentence summary of your class here.
- *  Follow it with additional details about its purpose, what abstraction
- *  it represents, and how to use it.
+ * Builds the decision tree used by the SARS-CoV-3 health check and uses it to
+ * advise the user. leanrs questions from the user
  * 
- *  @author praga
- *  @version Oct 9, 2026
+ * @author pragati anandarajan
+ * @version Oct 9, 2026
  */
 public class SARSCoV3HealthBuilder
 {
-    //~ Fields ................................................................
+    // ~ Fields ................................................................
     private DecisionTreeInterface<String> healthTree;
 
-    //~ Constructors ..........................................................
+    // ----------------------------------------------------------
+    /**
+     * Create a new SARSCoV3HealthBuilder object.
+     * 
+     * @param fileName
+     *            name of the file
+     */
+    // ~ Constructors ..........................................................
     public SARSCoV3HealthBuilder(String fileName)
     {
         healthTree = new DecisionTree<String>();
         ArrayList<String> contents = readData(fileName);
-        healthTree.setRootNode(buildTree(contents, new BinaryNode<String>(), 0));
+        healthTree
+            .setRootNode(buildTree(contents, new BinaryNode<String>(), 0));
         healthTree.resetCurrentNode();
     }
-    //~Public  Methods ........................................................
+    // ~Public Methods ........................................................
 
+
+    // ----------------------------------------------------------
+    /**
+     * reads the file properly and formats it as well
+     * 
+     * @param fileName
+     *            name of the file
+     * @return every item in the file
+     */
     public ArrayList<String> readData(String fileName)
     {
         ArrayList<String> contents = new ArrayList<String>();
@@ -53,29 +70,58 @@ public class SARSCoV3HealthBuilder
         }
         return contents;
     }
-    
-    public BinaryNode<String> buildTree(ArrayList<String> contents,
-        BinaryNode<String> node, int index)
+
+
+    // ----------------------------------------------------------
+    /**
+     * Recursively builds a decision tree from the items read from the file. The
+     * items are in level order with "null" marking missing nodes
+     *
+     * @param contents
+     *            the items read from the file, in level order
+     * @param node
+     *            an empty node that is filled in if the item at index is not
+     *            null
+     * @param index
+     *            the position in contents of the item for this node
+     * @return the root of the subtree built, or null if there is no node here
+     */
+    public BinaryNode<String> buildTree(
+        ArrayList<String> contents,
+        BinaryNode<String> node,
+        int index)
     {
         BinaryNode<String> result = null;
 
         if (index < contents.size() && !contents.get(index).equals("null"))
         {
             node.setData(contents.get(index));
-            node.setLeftChild(buildTree(contents, new BinaryNode<String>(),
-                2 * index + 1));
-            node.setRightChild(buildTree(contents, new BinaryNode<String>(),
-                2 * index + 2));
+            node.setLeftChild(
+                buildTree(contents, new BinaryNode<String>(), 2 * index + 1));
+            node.setRightChild(
+                buildTree(contents, new BinaryNode<String>(), 2 * index + 2));
             result = node;
         }
         return result;
     }
-    
+
+
+    /**
+     * Gets the decision tree used by this health check.
+     *
+     * @return the health tree
+     */
     public DecisionTreeInterface<String> getHealthTree()
     {
         return healthTree;
     }
-    
+
+
+    // ----------------------------------------------------------
+    /**
+     * ASks the user a series of yes or no questions by walking down the health
+     * tree from the root, then displays the decision reached.
+     */
     public void decide()
     {
         if (healthTree.isEmpty())
@@ -108,6 +154,13 @@ public class SARSCoV3HealthBuilder
             learn();
         }
     }
+
+
+    // ----------------------------------------------------------
+    /**
+     * Asks the user for the correct answer and for a question that
+     * distinguishes it from the old answer, then updates the tree.
+     */
     public void learn()
     {
         String oldAnswer = healthTree.getCurrentData();
@@ -115,13 +168,26 @@ public class SARSCoV3HealthBuilder
         System.out.println("What should be the answer?");
         String newAnswer = Driver.getUserResponse();
 
-        System.out.println("Give me a question whose answer is yes for "
-            + newAnswer + "  but no for  " + oldAnswer);
+        System.out.println(
+            "Give me a question whose answer is yes for " + newAnswer
+                + "  but no for  " + oldAnswer);
         String question = Driver.getUserResponse();
 
         updateTree(question, oldAnswer, newAnswer);
     }
-    
+
+
+    // ----------------------------------------------------------
+    /**
+     * Replaces the current leaf with a new question and gives two new leaves
+     * 
+     * @param question
+     *            the new question to store in the current node
+     * @param noAnswer
+     *            the answer for the left ("no") child
+     * @param yesAnswer
+     *            the answer for the right ("yes") child
+     */
     public void updateTree(String question, String noAnswer, String yesAnswer)
     {
         healthTree.getCurrentNode().setData(question);

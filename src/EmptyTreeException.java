@@ -1,7 +1,6 @@
 // -------------------------------------------------------------------------
 /**
- * Write a one-sentence summary of your class here. Follow it with additional
- * details about its purpose, what abstraction it represents, and how to use it.
+ * thrown when an OPeration tries to work on an empty tree
  * 
  * @author Pragati Anandarajan
  * @version Oct 6, 2026
